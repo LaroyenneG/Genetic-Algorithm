@@ -14,7 +14,7 @@ using namespace Genetic;
 class CardDispatcher : public Nursery<Packet> {
 
 public:
-    CardDispatcher(unsigned int popSize);
+    explicit CardDispatcher(unsigned int popSize);
 
 protected:
     unsigned long fitness(const Packet &individual) const override;

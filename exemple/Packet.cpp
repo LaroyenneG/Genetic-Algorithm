@@ -64,7 +64,7 @@ std::ostream &operator<<(std::ostream &stream, const Packet &packet) {
         }
     }
 
-    stream << "]\n";
+    stream << ']';
 
     return stream;
 }
