@@ -14,15 +14,16 @@ using namespace Genetic;
 class CardDispatcher : public Nursery<Packet> {
 
 public:
-    explicit CardDispatcher(unsigned int popSize);
+    CardDispatcher();
 
 protected:
     unsigned long fitness(const Packet &individual) const override;
 
-    void mutate(const Packet &individual) const override;
+    void mutate(Packet &individual) const override;
 
     std::pair<Packet *, Packet *> crossing(const std::pair<Packet *, Packet *> &individuals) const override;
 
+    Packet *generateIndividual() const override;
 };
 
 

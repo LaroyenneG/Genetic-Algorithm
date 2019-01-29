@@ -4,26 +4,12 @@
 
 #include "CardDispatcher.h"
 
-CardDispatcher::CardDispatcher(unsigned int popSize) {
-
-    for (int i = 0; i < popSize; i++) {
-
-        Packet *packet = new Packet(10);
-
-        for (int j = 0; j < packet->size(); ++j) {
-            mutate(*packet);
-        }
-
-        appendIndividual(packet);
-    }
-}
-
 
 unsigned long CardDispatcher::fitness(const Packet &individual) const {
     return static_cast<unsigned long>(abs(36 - individual.addValue()) + abs(360 - individual.multValue()));
 }
 
-void CardDispatcher::mutate(const Packet &individual) const {
+void CardDispatcher::mutate(Packet &individual) const {
 
     if (individual.size() > 0) {
 
@@ -69,5 +55,20 @@ std::pair<Packet *, Packet *> CardDispatcher::crossing(const std::pair<Packet *,
     }
 
     return newPair;
+}
+
+Packet *CardDispatcher::generateIndividual() const {
+
+    auto *packet = new Packet(10);
+
+    for (int j = 0; j < packet->size(); ++j) {
+        mutate(*packet);
+    }
+
+    return packet;
+}
+
+CardDispatcher::CardDispatcher() {
+    generatePopulation(10);
 }
 

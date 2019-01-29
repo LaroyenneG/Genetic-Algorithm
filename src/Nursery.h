@@ -8,6 +8,7 @@
 #define DEFAULT_MUTATION_PROBABILITY 0.1f
 #define DEFAULT_CROSSING_PROBABILITY 0.3f
 #define DEFAULT_MAX_ITERATION 10000000
+#define DEFAULT_POP_SIZE 10
 
 #include <random>
 #include "Population.h"
@@ -30,21 +31,24 @@ namespace Genetic {
 
         void introduceNewGeneration(const Population<I> &nPopulation);
 
+        void appendIndividual(I *individual);
+
     public:
         Nursery();
 
-        Nursery(float _mutationProbability, float _crossingProbability, unsigned long _maxIteration);
+        Nursery(float _mutationProbability, float _crossingProbability,
+                unsigned long _maxIteration);
 
         ~Nursery();
+
+        void generatePopulation(unsigned int size);
 
         const I *process();
 
         const I *findBestIndividual();
 
-        void appendIndividual(I *individual);
-
         unsigned long getIteration() const;
-        
+
         static bool probability(float p);
 
     protected:
@@ -53,15 +57,19 @@ namespace Genetic {
         virtual void mutate(I &individual) const = 0;
 
         virtual std::pair<I *, I *> crossing(const std::pair<I *, I *> &individuals) const = 0;
+
+        virtual I *generateIndividual() const = 0;
     };
 
     template<typename I>
     Nursery<I>::Nursery()
-            : Nursery(DEFAULT_MUTATION_PROBABILITY, DEFAULT_CROSSING_PROBABILITY, DEFAULT_MAX_ITERATION) {
+            : Nursery(DEFAULT_MUTATION_PROBABILITY, DEFAULT_CROSSING_PROBABILITY,
+                      DEFAULT_MAX_ITERATION) {
     }
 
     template<typename I>
-    Nursery<I>::Nursery(float _mutationProbability, float _crossingProbability, unsigned long _maxIteration)
+    Nursery<I>::Nursery(float _mutationProbability, float _crossingProbability,
+                        unsigned long _maxIteration)
             : mutationProbability(_mutationProbability), crossingProbability(_crossingProbability),
               maxIteration(_maxIteration), iteration(0) {
     }
@@ -166,6 +174,13 @@ namespace Genetic {
     template<typename I>
     unsigned long Nursery<I>::getIteration() const {
         return iteration;
+    }
+
+    template<typename I>
+    void Nursery<I>::generatePopulation(unsigned int size) {
+        for (int i = 0; i < size; ++i) {
+            appendIndividual(generateIndividual());
+        }
     }
 }
 

@@ -17,19 +17,22 @@ int main(int argc, char **argv) {
 
     t1 = clock();
 
-    CardDispatcher cardDispatcher(10);
+    CardDispatcher cardDispatcher;
 
     auto packet = cardDispatcher.process();
 
-    t2 = clock();
+    if (packet != nullptr) {
 
-    float time = (float) (t2 - t1) / CLOCKS_PER_SEC;;
+        t2 = clock();
 
-    std::cout << "Solution : " << *packet << std::endl;
+        float time = (float) (t2 - t1) / CLOCKS_PER_SEC;;
 
-    std::cout << "Time : " << time << " s" << std::endl;
+        std::cout << "Solution : " << *packet << std::endl;
 
-    std::cout << "Iterations : " << cardDispatcher.getIteration() << std::endl;
+        std::cout << "Time : " << time << " s" << std::endl;
+
+        std::cout << "Iterations : " << cardDispatcher.getIteration() << std::endl;
+    }
 
     return EXIT_SUCCESS;
 }
