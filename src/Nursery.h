@@ -50,7 +50,7 @@ namespace Genetic {
     protected:
         virtual unsigned long fitness(const I &individual) const = 0;
 
-        virtual void mutate(const I &individual) const = 0;
+        virtual void mutate(I &individual) const = 0;
 
         virtual std::pair<I *, I *> crossing(const std::pair<I *, I *> &individuals) const = 0;
     };
