@@ -5,7 +5,7 @@
 #include "CardDispatcher.h"
 
 CardDispatcher::CardDispatcher() {
-    generatePopulation(50);
+    generatePopulation(70);
 }
 
 unsigned long CardDispatcher::fitness(const Packet &individual) const {
@@ -18,7 +18,7 @@ void CardDispatcher::mutate(Packet &individual) const {
 
         unsigned int index = ((unsigned int) random()) % individual.size();
 
-        individual[index] = probability(0.5);
+        individual[index] = !individual[index];
     }
 }
 

@@ -47,6 +47,8 @@ namespace Genetic {
 
         void deleteContents();
 
+        std::ostream &printOn(std::ostream &os);
+
         Population<I> operator+(const Population<I> &population);
 
         Population<I> &operator+=(const Population<I> &population);
@@ -59,7 +61,6 @@ namespace Genetic {
 
         auto &operator[](unsigned long id) const;
     };
-
 
     template<typename I>
     Population<I>::Population() = default;
@@ -231,6 +232,20 @@ namespace Genetic {
         removePopulation(population);
 
         return *this;
+    }
+
+    template<typename I>
+    std::ostream &Population<I>::printOn(std::ostream &os) {
+
+        os << "Population {\n";
+
+        for (auto item : individuals) {
+            os << *item << "\n";
+        }
+
+        os << "}\n";
+
+        return os;
     }
 }
 

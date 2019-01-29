@@ -114,6 +114,10 @@ namespace Genetic {
                     bestValue = value;
                     individual = allIndividual[i];
                 }
+
+                if (probability(0.3)) {
+                    break;
+                }
             }
 
             population += individual;
@@ -121,8 +125,6 @@ namespace Genetic {
         }
 
         allIndividual.deleteContents();
-
-        assert(population.size() == popSize);
     }
 
     template<typename I>
