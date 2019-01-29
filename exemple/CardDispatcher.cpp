@@ -18,9 +18,8 @@ void CardDispatcher::mutate(Packet &individual) const {
 
         unsigned int index = ((unsigned int) random()) % individual.size();
 
-        individual[index] = random() % 2 == 0;
+        individual[index] = probability(0.5);
     }
-
 }
 
 std::pair<Packet *, Packet *> CardDispatcher::crossing(const std::pair<Packet *, Packet *> &individuals) const {
