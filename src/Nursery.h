@@ -30,8 +30,6 @@ namespace Genetic {
 
         void introduceNewGeneration(const Population<I> &nPopulation);
 
-        static bool probability(float p);
-
     public:
         Nursery();
 
@@ -46,6 +44,8 @@ namespace Genetic {
         void appendIndividual(I *individual);
 
         unsigned long getIteration() const;
+        
+        static bool probability(float p);
 
     protected:
         virtual unsigned long fitness(const I &individual) const = 0;
@@ -146,7 +146,7 @@ namespace Genetic {
 
         double randNumber = 0;
 
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 1; i < 5; ++i) {
             randNumber += ((unsigned long) random() % 10) / pow(10, i);
         }
 
