@@ -25,6 +25,8 @@ namespace Genetic {
 
         Population(const std::pair<I *, I *> &pair);
 
+        Population(I *individual);
+
         ~Population();
 
         void removeIndividual(const I *individual);
@@ -40,6 +42,8 @@ namespace Genetic {
         std::pair<I *, I *> select() const;
 
         void clear();
+
+        bool empty() const;
 
         void deleteContents();
 
@@ -72,6 +76,11 @@ namespace Genetic {
         for (auto item : population.individuals) {
             individuals.push_back(item);
         }
+    }
+
+    template<typename I>
+    Population<I>::Population(I *individual) {
+        addIndividual(individual);
     }
 
     template<typename I>
@@ -151,6 +160,11 @@ namespace Genetic {
     }
 
     template<typename I>
+    bool Population<I>::empty() const {
+        return size() <= 0;
+    }
+
+    template<typename I>
     void Population<I>::deleteContents() {
 
         for (auto item : individuals) {
@@ -170,7 +184,7 @@ namespace Genetic {
 
         result.addPopulation(population);
 
-        return *result;
+        return result;
     }
 
     template<typename I>

@@ -4,6 +4,9 @@
 
 #include "CardDispatcher.h"
 
+CardDispatcher::CardDispatcher() {
+    generatePopulation(50);
+}
 
 unsigned long CardDispatcher::fitness(const Packet &individual) const {
     return static_cast<unsigned long>(abs(36 - individual.addValue()) + abs(360 - individual.multValue()));
@@ -68,7 +71,4 @@ Packet *CardDispatcher::generateIndividual() const {
     return packet;
 }
 
-CardDispatcher::CardDispatcher() {
-    generatePopulation(10);
-}
 

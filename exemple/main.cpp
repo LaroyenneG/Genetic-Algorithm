@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
         std::cerr << "Usage : Nursery" << std::endl;
         exit(EXIT_FAILURE);
     }
+    srandom(static_cast<unsigned int>(time(nullptr)));
 
     clock_t t1, t2;
 

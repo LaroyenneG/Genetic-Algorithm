@@ -5,12 +5,13 @@
 #ifndef GENETIC_ALGORITHM_NURSERY_H
 #define GENETIC_ALGORITHM_NURSERY_H
 
-#define DEFAULT_MUTATION_PROBABILITY 0.1f
-#define DEFAULT_CROSSING_PROBABILITY 0.3f
+#define DEFAULT_MUTATION_PROBABILITY 0.1
+#define DEFAULT_CROSSING_PROBABILITY 0.3
 #define DEFAULT_MAX_ITERATION 10000000
-#define DEFAULT_POP_SIZE 10
 
 #include <random>
+#include <cassert>
+#include <iostream>
 #include "Population.h"
 
 namespace Genetic {
@@ -93,7 +94,35 @@ namespace Genetic {
 
     template<typename I>
     void Nursery<I>::introduceNewGeneration(const Population<I> &nPopulation) {
-        population += nPopulation; // temperately
+
+        auto popSize = population.size();
+
+        Population allIndividual = population + nPopulation;
+
+        population.clear();
+
+        while (population.size() < popSize && !allIndividual.empty()) {
+
+            I *individual = nullptr;
+            unsigned long bestValue = 0;
+
+            for (int i = 0; i < allIndividual.size(); i++) {
+
+                auto value = fitness(*allIndividual[i]);
+
+                if (i == 0 || value <= bestValue) {
+                    bestValue = value;
+                    individual = allIndividual[i];
+                }
+            }
+
+            population += individual;
+            allIndividual -= individual;
+        }
+
+        allIndividual.deleteContents();
+
+        assert(population.size() == popSize);
     }
 
     template<typename I>
@@ -154,7 +183,7 @@ namespace Genetic {
 
         double randNumber = 0;
 
-        for (int i = 1; i < 5; ++i) {
+        for (int i = 1; i < 6; ++i) {
             randNumber += ((unsigned long) random() % 10) / pow(10, i);
         }
 
