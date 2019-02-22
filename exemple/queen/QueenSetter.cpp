@@ -7,7 +7,7 @@
 #include "QueenSetter.h"
 
 QueenSetter::QueenSetter() {
-    generatePopulation(4);
+    generatePopulation(5);
 }
 
 
@@ -16,8 +16,10 @@ unsigned long QueenSetter::fitness(const Board &individual) const {
     unsigned long n = 0;
 
     for (int i = 0; i < individual.size() - 1; ++i) {
-        if (abs(individual[i] - individual[i + 1]) == 1) {
-            n++;
+        for (int j = i + 1; j < individual.size(); ++j) {
+            if (abs(i - j) == abs(individual[i] - individual[j])) {
+                n++;
+            }
         }
     }
 
@@ -34,7 +36,7 @@ void QueenSetter::mutate(Board &individual) const {
         index2 = ((unsigned int) random()) % individual.size();
     } while (index1 == index2);
 
-    auto tmp = individual[index1];
+    auto tmp = individual[index2];
 
     individual[index2] = individual[index1];
 
@@ -83,7 +85,7 @@ std::pair<Board *, Board *> QueenSetter::crossing(const std::pair<Board *, Board
 
 Board *QueenSetter::generateIndividual() const {
 
-    auto *board = new Board(4);
+    auto *board = new Board(8);
 
     std::vector<unsigned short> values;
 

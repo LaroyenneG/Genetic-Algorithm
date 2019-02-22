@@ -38,6 +38,12 @@ void cardDemo() {
     launch(cardDispatcher);
 }
 
+void queenDemo() {
+    QueenSetter queenSetter;
+
+    launch(queenSetter);
+}
+
 
 int main(int argc, char **argv) {
 
@@ -48,10 +54,9 @@ int main(int argc, char **argv) {
 
     srandom(static_cast<unsigned int>(time(nullptr)));
 
+    cardDemo();
+    queenDemo();
 
-    QueenSetter queenSetter;
-
-    launch(queenSetter);
 
     return EXIT_SUCCESS;
 }
