@@ -6,7 +6,7 @@
 #define GENETIC_ALGORITHM_CARDDISPATCHER_H
 
 
-#include "../src/Nursery.h"
+#include "Nursery.h"
 #include "Packet.h"
 
 using namespace Genetic;

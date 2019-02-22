@@ -4,7 +4,40 @@
 
 
 #include <iostream>
-#include "CardDispatcher.h"
+#include "card/CardDispatcher.h"
+#include "queen/QueenSetter.h"
+
+template<typename I>
+void launch(Nursery<I> &nursery) {
+
+    clock_t t1, t2;
+
+    t1 = clock();
+
+    const I *solution = nursery.process();
+
+
+    if (solution != nullptr) {
+
+        t2 = clock();
+
+        float time = (float) (t2 - t1) / CLOCKS_PER_SEC;;
+
+        std::cout << "Solution : " << *solution << std::endl;
+
+        std::cout << "Time : " << time << " s" << std::endl;
+
+        std::cout << "Iterations : " << nursery.getIteration() << std::endl;
+    }
+}
+
+void cardDemo() {
+
+    CardDispatcher cardDispatcher;
+
+    launch(cardDispatcher);
+}
+
 
 int main(int argc, char **argv) {
 
@@ -12,28 +45,13 @@ int main(int argc, char **argv) {
         std::cerr << "Usage : Nursery" << std::endl;
         exit(EXIT_FAILURE);
     }
+
     srandom(static_cast<unsigned int>(time(nullptr)));
 
-    clock_t t1, t2;
 
-    t1 = clock();
+    QueenSetter queenSetter;
 
-    CardDispatcher cardDispatcher;
-
-    auto packet = cardDispatcher.process();
-
-    if (packet != nullptr) {
-
-        t2 = clock();
-
-        float time = (float) (t2 - t1) / CLOCKS_PER_SEC;;
-
-        std::cout << "Solution : " << *packet << std::endl;
-
-        std::cout << "Time : " << time << " s" << std::endl;
-
-        std::cout << "Iterations : " << cardDispatcher.getIteration() << std::endl;
-    }
+    launch(queenSetter);
 
     return EXIT_SUCCESS;
 }
