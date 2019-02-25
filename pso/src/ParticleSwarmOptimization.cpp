@@ -141,7 +141,7 @@ Particle *ParticleSwarmOptimization::processing() {
                 }
             }
 
-            if (fitness <= fitnessValue) {
+            if (fitness == fitnessValue) {
                 solution = particle;
                 solutionFound = true;
             }
