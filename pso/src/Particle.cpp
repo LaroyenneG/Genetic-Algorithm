@@ -2,8 +2,11 @@
 // Created by Guillaume Laroyenne on 24/02/19.
 //
 
+
+#define _USE_MATH_DEFINES
+
+#include <cmath>
 #include <string>
-#include <math.h>
 #include "Particle.h"
 
 Particle::Particle(unsigned int _dimension)
@@ -77,11 +80,11 @@ double Particle::getDimension() const {
 }
 
 double Particle::bestFitness() const {
-    return 0;
+    return computeFitness(bestPosition, dimension);
 }
 
 double Particle::fitness() const {
-    return 0;
+    return computeFitness(position, dimension);
 }
 
 double Particle::computeFitness(double *table, unsigned int size) {

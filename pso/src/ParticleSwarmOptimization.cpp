@@ -3,11 +3,8 @@
 //
 
 #include <random>
-#include "ParticleSwarmOptimization.h"
-
-#define _USE_MATH_DEFINES
-
 #include <iostream>
+#include "ParticleSwarmOptimization.h"
 
 
 ParticleSwarmOptimization::~ParticleSwarmOptimization() {
