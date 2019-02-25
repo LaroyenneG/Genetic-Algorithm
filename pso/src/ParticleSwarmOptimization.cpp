@@ -5,6 +5,11 @@
 #include <random>
 #include "ParticleSwarmOptimization.h"
 
+#define _USE_MATH_DEFINES
+
+#include <iostream>
+
+
 ParticleSwarmOptimization::~ParticleSwarmOptimization() {
 
     for (int i = 0; i < swarmSize; ++i) {
@@ -22,7 +27,7 @@ double ParticleSwarmOptimization::computeFitness(const Particle *particle) const
 
         double x = particle->getPosition(d);
 
-        result += x * x - 10 * cos(2.0 * M_2_PI * x);
+        result += x * x - 10.0 * cos(2.0 * M_PI * x);
     }
 
     return result;
@@ -110,18 +115,18 @@ Particle *ParticleSwarmOptimization::processing() {
 
             for (unsigned int d = 0; d < particle->getDimension(); ++d) {
 
-                double r1 = coefficients[0] * (random() % 2);
-                double r2 = coefficients[1] * (random() % 2);
+                double r1 = coefficients[0] * randDoubleBetween(0.0, 1.0);
+                double r2 = coefficients[1] * randDoubleBetween(0.0, 1.0);
 
-                particle->setSpeed(d, boundedSpeed(
-                        particle->getSpeed(d) + r1 * (particle->getBestPosition(d) - particle->getPosition(d)) +
-                        r2 * (bestNeighbor->getBestPosition(d) - particle->getPosition(d))));
+
+                particle->setSpeed(d, boundedSpeed(r1 * (particle->getBestPosition(d) - particle->getPosition(d)) +
+                                                   r2 * (bestNeighbor->getBestPosition(d) - particle->getPosition(d))));
 
                 particle->setPosition(d, boundedPosition(particle->getPosition(d) + particle->getSpeed(d)));
             }
         }
 
-        for (int j = 0; j < swarmSize; ++j) {
+        for (unsigned int j = 0; j < swarmSize; ++j) {
 
             Particle *particle = swarm[j];
 
@@ -136,7 +141,7 @@ Particle *ParticleSwarmOptimization::processing() {
                 }
             }
 
-            if (fitness == fitnessValue) {
+            if (fitness <= fitnessValue) {
                 solution = particle;
                 solutionFound = true;
             }
@@ -153,17 +158,21 @@ Particle *ParticleSwarmOptimization::getBestNeighbor(unsigned int index) const {
     double bestFitness = 0;
     Particle *bestNeighbor = nullptr;
 
-    for (int i = index; i < index + nbNeighbors; ++i) {
+    int step = nbNeighbors / 2;
 
-        Particle *particle = swarm[i % swarmSize];
+    for (int i = index - step; i < static_cast<int>(index) + step; ++i) {
 
-        double fitness = computeFitness(particle);
+        if (i != index) {
 
-        if (bestNeighbor == nullptr || bestFitness > fitness) {
-            bestNeighbor = particle;
-            bestFitness = fitness;
+            Particle *particle = swarm[i % swarmSize];
+
+            if (bestNeighbor == nullptr || bestFitness > particle->getFitness()) {
+                bestNeighbor = particle;
+                bestFitness = particle->getFitness();
+            }
         }
     }
+
 
     return bestNeighbor;
 }
