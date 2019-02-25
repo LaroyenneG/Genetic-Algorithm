@@ -3,11 +3,12 @@
 //
 
 #include <string>
+#include <math.h>
 #include "Particle.h"
 
 Particle::Particle(unsigned int _dimension)
         : dimension(_dimension), position(new double[_dimension]),
-          bestPosition(new double[_dimension]), speed(new double[_dimension]), fitness(0) {
+          bestPosition(new double[_dimension]), speed(new double[_dimension]) {
 
     for (int i = 0; i < dimension; ++i) {
         position[i] = 0;
@@ -43,13 +44,6 @@ double Particle::getSpeed(unsigned int dim) const {
     return speed[dim];
 }
 
-double Particle::getFitness() const {
-    return fitness;
-}
-
-void Particle::setFitness(double _fitness) {
-    fitness = _fitness;
-}
 
 void Particle::checkArrayIndex(unsigned int dim) const {
     if (dim >= dimension) {
@@ -80,4 +74,26 @@ void Particle::setSpeed(unsigned int dim, double value) {
 
 double Particle::getDimension() const {
     return dimension;
+}
+
+double Particle::bestFitness() const {
+    return 0;
+}
+
+double Particle::fitness() const {
+    return 0;
+}
+
+double Particle::computeFitness(double *table, unsigned int size) {
+
+    double result = 10.0 * size;
+
+    for (unsigned int d = 0; d < size; ++d) {
+
+        double xi = table[d];
+
+        result += xi * xi - 10.0 * cos(2.0 * M_PI * xi);
+    }
+
+    return result;
 }

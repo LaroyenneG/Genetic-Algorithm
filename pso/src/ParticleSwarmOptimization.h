@@ -16,21 +16,21 @@ private:
 
     double deltaSpeed[2];
 
-    double fitnessValue;
+    double fitnessDesired;
 
     unsigned int dimensionSpace;
 
     double bounds[2];
 
-    double coefficients[2];
+    double coefficients[3];
 
     Particle **swarm;
-
-    double computeFitness(const Particle *particle) const;
 
     void initializeSwarm();
 
     Particle *getBestNeighbor(unsigned int index) const;
+
+    Particle *getBestParticle() const;
 
     double boundedSpeed(double value) const;
 
@@ -39,8 +39,8 @@ private:
 public:
     ParticleSwarmOptimization(unsigned int _dimensionSpace, unsigned int _nbParticle, unsigned int _nbNeighbors,
                               unsigned int _nbIteration, double _deltaSpeedMin, double _deltaSpeedMax,
-                              double _fitnessValue, double _minBound, double _maxBound, double _indCoefficients,
-                              double _colCoefficients);
+                              double _fitnessValue, double _minBound, double _maxBound, double _indCoefficient,
+                              double _colCoefficient, double _inertiaCoefficient);
 
     ~ParticleSwarmOptimization();
 

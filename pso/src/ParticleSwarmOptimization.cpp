@@ -19,40 +19,30 @@ ParticleSwarmOptimization::~ParticleSwarmOptimization() {
     delete[] swarm;
 }
 
-double ParticleSwarmOptimization::computeFitness(const Particle *particle) const {
-
-    double result = 10.0 * particle->getDimension();
-
-    for (unsigned int d = 0; d < particle->getDimension(); ++d) {
-
-        double x = particle->getPosition(d);
-
-        result += x * x - 10.0 * cos(2.0 * M_PI * x);
-    }
-
-    return result;
-}
 
 ParticleSwarmOptimization::ParticleSwarmOptimization(unsigned int _dimensionSpace, unsigned int _nbParticle,
                                                      unsigned int _nbNeighbors,
                                                      unsigned int _nbIteration, double _deltaSpeedMin,
                                                      double _deltaSpeedMax,
                                                      double _fitnessValue, double _minBound, double _maxBound,
-                                                     double _indCoefficients,
-                                                     double _colCoefficients) : swarmSize(_nbParticle),
-                                                                                nbNeighbors(_nbNeighbors),
-                                                                                nbIteration(_nbIteration),
-                                                                                fitnessValue(_fitnessValue),
-                                                                                dimensionSpace(_dimensionSpace),
-                                                                                swarm(new Particle *[_nbParticle]) {
+                                                     double _indCoefficient,
+                                                     double _colCoefficient, double _inertiaCoefficient)
+        : swarmSize(_nbParticle),
+          nbNeighbors(_nbNeighbors),
+          nbIteration(_nbIteration),
+          fitnessDesired(_fitnessValue),
+          dimensionSpace(_dimensionSpace),
+          swarm(new Particle *[_nbParticle]) {
+
     deltaSpeed[0] = _deltaSpeedMin;
     deltaSpeed[1] = _deltaSpeedMax;
 
     bounds[0] = _minBound;
     bounds[1] = _maxBound;
 
-    coefficients[0] = _indCoefficients;
-    coefficients[1] = _colCoefficients;
+    coefficients[0] = _indCoefficient;
+    coefficients[1] = _colCoefficient;
+    coefficients[2] = _inertiaCoefficient;
 
     if (coefficients[0] + coefficients[1] != 4) {
         delete[] swarm;
@@ -90,8 +80,6 @@ void ParticleSwarmOptimization::initializeSwarm() {
             particle->setBestPosition(d, position);
             particle->setSpeed(d, randDoubleBetween(deltaSpeed[0], deltaSpeed[1]));
         }
-
-        particle->setFitness(computeFitness(particle));
     }
 }
 
@@ -101,9 +89,8 @@ double ParticleSwarmOptimization::randDoubleBetween(double min, double max) {
 
 Particle *ParticleSwarmOptimization::processing() {
 
-    Particle *solution = nullptr;
-
     unsigned int iteration = 0;
+
     bool solutionFound = false;
 
     while (iteration < nbIteration && !solutionFound) {
@@ -111,7 +98,7 @@ Particle *ParticleSwarmOptimization::processing() {
         for (unsigned int i = 0; i < swarmSize; ++i) {
 
             Particle *particle = swarm[i];
-            Particle *bestNeighbor = getBestNeighbor(i);
+            Particle *bestParticle = getBestParticle();
 
             for (unsigned int d = 0; d < particle->getDimension(); ++d) {
 
@@ -119,8 +106,10 @@ Particle *ParticleSwarmOptimization::processing() {
                 double r2 = coefficients[1] * randDoubleBetween(0.0, 1.0);
 
 
-                particle->setSpeed(d, boundedSpeed(r1 * (particle->getBestPosition(d) - particle->getPosition(d)) +
-                                                   r2 * (bestNeighbor->getBestPosition(d) - particle->getPosition(d))));
+                particle->setSpeed(d, boundedSpeed(
+                        coefficients[2] * particle->getSpeed(d) +
+                        r1 * (particle->getBestPosition(d) - particle->getPosition(d)) +
+                        r2 * (bestParticle->getBestPosition(d) - particle->getPosition(d))));
 
                 particle->setPosition(d, boundedPosition(particle->getPosition(d) + particle->getSpeed(d)));
             }
@@ -130,19 +119,15 @@ Particle *ParticleSwarmOptimization::processing() {
 
             Particle *particle = swarm[j];
 
-            double fitness = computeFitness(particle);
+            double fitness = particle->fitness();
 
-            if (fitness < particle->getFitness()) {
-
-                particle->setFitness(fitness);
-
+            if (fitness < particle->bestFitness()) {
                 for (unsigned int d = 0; d < particle->getDimension(); ++d) {
                     particle->setBestPosition(d, particle->getPosition(d));
                 }
             }
 
-            if (fitness == fitnessValue) {
-                solution = particle;
+            if (fitness == fitnessDesired) {
                 solutionFound = true;
             }
         }
@@ -150,7 +135,7 @@ Particle *ParticleSwarmOptimization::processing() {
         iteration++;
     }
 
-    return solution;
+    return getBestParticle();
 }
 
 Particle *ParticleSwarmOptimization::getBestNeighbor(unsigned int index) const {
@@ -166,13 +151,12 @@ Particle *ParticleSwarmOptimization::getBestNeighbor(unsigned int index) const {
 
             Particle *particle = swarm[i % swarmSize];
 
-            if (bestNeighbor == nullptr || bestFitness > particle->getFitness()) {
+            if (bestNeighbor == nullptr || bestFitness > particle->fitness()) {
                 bestNeighbor = particle;
-                bestFitness = particle->getFitness();
+                bestFitness = particle->fitness();
             }
         }
     }
-
 
     return bestNeighbor;
 }
@@ -204,4 +188,17 @@ double ParticleSwarmOptimization::boundedPosition(double value) const {
         result = value;
     }
     return result;
+}
+
+Particle *ParticleSwarmOptimization::getBestParticle() const {
+
+    Particle *best = nullptr;
+
+    for (unsigned int i = 0; i < swarmSize; ++i) {
+        if (i == 0 || best->fitness() > swarm[i]->fitness()) {
+            best = swarm[i];
+        }
+    }
+
+    return best;
 }

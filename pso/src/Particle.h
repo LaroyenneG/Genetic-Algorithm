@@ -12,9 +12,10 @@ private:
     double *position;
     double *bestPosition;
     double *speed;
-    double fitness;
 
     void checkArrayIndex(unsigned int dim) const;
+
+    static double computeFitness(double *table, unsigned int size);
 
 public:
     explicit Particle(unsigned int _dimension);
@@ -31,9 +32,9 @@ public:
 
     void setSpeed(unsigned int dim, double value);
 
-    double getFitness() const;
+    double bestFitness() const;
 
-    void setFitness(double _fitness);
+    double fitness() const;
 
     ~Particle();
 
