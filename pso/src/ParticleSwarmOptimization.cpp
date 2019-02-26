@@ -99,14 +99,16 @@ Particle *ParticleSwarmOptimization::processing() {
 
             for (unsigned int d = 0; d < particle->getDimension(); ++d) {
 
-                double r1 = coefficients[0] * randDoubleBetween(0.0, 1.0);
-                double r2 = coefficients[1] * randDoubleBetween(0.0, 1.0);
+                double r1 = randDoubleBetween(0.0, 1.0);
+                double r2 = randDoubleBetween(0.0, 1.0);
+
+                double b1 = coefficients[0] * r1 *
+                            (particle->getBestPosition(d) - particle->getPosition(d));
+                double b2 = coefficients[1] * r2 * (bestParticle->getBestPosition(d) -
+                                                    particle->getPosition(d));
 
 
-                particle->setSpeed(d, boundedSpeed(
-                        coefficients[2] * particle->getSpeed(d) +
-                        r1 * (particle->getBestPosition(d) - particle->getPosition(d)) +
-                        r2 * (bestParticle->getBestPosition(d) - particle->getPosition(d))));
+                particle->setSpeed(d, boundedSpeed(coefficients[2] * particle->getSpeed(d) + b1 + b2));
 
                 particle->setPosition(d, boundedPosition(particle->getPosition(d) + particle->getSpeed(d)));
             }
@@ -148,7 +150,7 @@ Particle *ParticleSwarmOptimization::getBestNeighbor(unsigned int index) const {
 
             Particle *particle = swarm[i % swarmSize];
 
-            if (bestNeighbor == nullptr || bestFitness > particle->fitness()) {
+            if (bestNeighbor == nullptr || bestFitness > particle->bestFitness()) {
                 bestNeighbor = particle;
                 bestFitness = particle->fitness();
             }
@@ -192,7 +194,7 @@ Particle *ParticleSwarmOptimization::getBestParticle() const {
     Particle *best = nullptr;
 
     for (unsigned int i = 0; i < swarmSize; ++i) {
-        if (i == 0 || best->fitness() > swarm[i]->fitness()) {
+        if (i == 0 || best->bestFitness() > swarm[i]->bestFitness()) {
             best = swarm[i];
         }
     }

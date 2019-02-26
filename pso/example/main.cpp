@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
 
     srandom(static_cast<unsigned int>(time(nullptr)));
 
-    ParticleSwarmOptimization pso(4, 40, 4, 100000, -4.0, 4.0, 0, -5.12, 5.12, 2, 2, 0.0);
+    ParticleSwarmOptimization pso(4, 40, 4, 10000000, -4.0, 4.0, 0, -5.12, 5.12, 2, 2, 0.0);
 
     Particle *particle = pso.processing();
 
