@@ -7,6 +7,7 @@
 
 #include <cmath>
 #include <string>
+#include <stdexcept>
 #include "Particle.h"
 
 Particle::Particle(unsigned int _dimension)
@@ -50,7 +51,7 @@ double Particle::getSpeed(unsigned int dim) const {
 
 void Particle::checkArrayIndex(unsigned int dim) const {
     if (dim >= dimension) {
-        throw std::string(" index out of bounds");
+        throw std::out_of_range(" index out of bounds");
     }
 }
 
@@ -87,7 +88,7 @@ double Particle::fitness() const {
     return computeFitness(position, dimension);
 }
 
-double Particle::computeFitness(double *table, unsigned int size) {
+double Particle::computeFitness(const double *table, unsigned int size) {
 
     double result = 10.0 * size;
 

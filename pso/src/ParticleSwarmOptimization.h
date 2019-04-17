@@ -14,15 +14,15 @@ private:
     unsigned int nbNeighbors;
     unsigned int nbIteration;
 
-    double deltaSpeed[2];
+    double deltaSpeed[2]{};
 
     double fitnessDesired;
 
     unsigned int dimensionSpace;
 
-    double bounds[2];
+    double bounds[2]{};
 
-    double coefficients[3];
+    double coefficients[3]{};
 
     Particle **swarm;
 

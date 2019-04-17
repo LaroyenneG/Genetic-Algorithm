@@ -43,17 +43,17 @@ ParticleSwarmOptimization::ParticleSwarmOptimization(unsigned int _dimensionSpac
 
     if (coefficients[0] + coefficients[1] != 4) {
         delete[] swarm;
-        throw std::string("invalid coefficients");
+        throw std::invalid_argument("invalid coefficients");
     }
 
     if (bounds[0] >= bounds[1]) {
         delete[] swarm;
-        throw std::string("invalid bounds");
+        throw std::invalid_argument("invalid bounds");
     }
 
     if (deltaSpeed[0] >= deltaSpeed[1]) {
         delete[] swarm;
-        throw std::string("invalid delta speed");
+        throw std::invalid_argument("invalid delta speed");
     }
 
     for (int i = 0; i < swarmSize; ++i) {

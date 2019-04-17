@@ -15,7 +15,7 @@ private:
 
     void checkArrayIndex(unsigned int dim) const;
 
-    static double computeFitness(double *table, unsigned int size);
+    static double computeFitness(const double *table, unsigned int size);
 
 public:
     explicit Particle(unsigned int _dimension);
