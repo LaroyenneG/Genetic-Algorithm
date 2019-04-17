@@ -23,13 +23,15 @@ ParticleSwarmOptimization::ParticleSwarmOptimization(unsigned int _dimensionSpac
                                                      double _deltaSpeedMax,
                                                      double _fitnessValue, double _minBound, double _maxBound,
                                                      double _indCoefficient,
-                                                     double _colCoefficient, double _inertiaCoefficient)
+                                                     double _colCoefficient, double _inertiaCoefficient,
+                                                     const FitnessEvaluatorInterface *_fitnessEvaluatorInterface)
         : swarmSize(_nbParticle),
           nbNeighbors(_nbNeighbors),
           nbIteration(_nbIteration),
           fitnessDesired(_fitnessValue),
           dimensionSpace(_dimensionSpace),
-          swarm(new Particle *[_nbParticle]) {
+          swarm(new Particle *[_nbParticle]),
+          fitnessEvaluatorInterface(_fitnessEvaluatorInterface) {
 
     deltaSpeed[0] = _deltaSpeedMin;
     deltaSpeed[1] = _deltaSpeedMax;
@@ -57,7 +59,7 @@ ParticleSwarmOptimization::ParticleSwarmOptimization(unsigned int _dimensionSpac
     }
 
     for (int i = 0; i < swarmSize; ++i) {
-        swarm[i] = new Particle(dimensionSpace);
+        swarm[i] = new Particle(dimensionSpace, fitnessEvaluatorInterface);
     }
 
     initializeSwarm();

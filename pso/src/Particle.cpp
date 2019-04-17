@@ -3,16 +3,14 @@
 //
 
 
-#define _USE_MATH_DEFINES
 
-#include <cmath>
 #include <string>
 #include <stdexcept>
 #include "Particle.h"
 
-Particle::Particle(unsigned int _dimension)
-        : dimension(_dimension), position(new double[_dimension]),
-          bestPosition(new double[_dimension]), speed(new double[_dimension]) {
+Particle::Particle(unsigned int _dimension, const FitnessEvaluatorInterface *_fitnessEvaluatorInterface)
+        : dimension(_dimension), position(new double[_dimension]), bestPosition(new double[_dimension]),
+          speed(new double[_dimension]), fitnessEvaluatorInterface(_fitnessEvaluatorInterface) {
 
     for (int i = 0; i < dimension; ++i) {
         position[i] = 0;
@@ -51,7 +49,7 @@ double Particle::getSpeed(unsigned int dim) const {
 
 void Particle::checkArrayIndex(unsigned int dim) const {
     if (dim >= dimension) {
-        throw std::out_of_range(" index out of bounds");
+        throw std::out_of_range("index out of bounds");
     }
 }
 
@@ -81,23 +79,10 @@ double Particle::getDimension() const {
 }
 
 double Particle::bestFitness() const {
-    return computeFitness(bestPosition, dimension);
+    return fitnessEvaluatorInterface->computeFitness(bestPosition, dimension);
 }
 
 double Particle::fitness() const {
-    return computeFitness(position, dimension);
+    return fitnessEvaluatorInterface->computeFitness(position, dimension);
 }
 
-double Particle::computeFitness(const double *table, unsigned int size) {
-
-    double result = 10.0 * size;
-
-    for (unsigned int d = 0; d < size; ++d) {
-
-        double xi = table[d];
-
-        result += xi * xi - 10.0 * cos(2.0 * M_PI * xi);
-    }
-
-    return result;
-}

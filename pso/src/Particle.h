@@ -5,6 +5,8 @@
 #ifndef PSO_PARTICLE_H
 #define PSO_PARTICLE_H
 
+#include "FitnessEvaluatorInterface.h"
+
 class Particle {
 
 private:
@@ -12,13 +14,12 @@ private:
     double *position;
     double *bestPosition;
     double *speed;
+    const FitnessEvaluatorInterface *fitnessEvaluatorInterface;
 
     void checkArrayIndex(unsigned int dim) const;
 
-    static double computeFitness(const double *table, unsigned int size);
-
 public:
-    explicit Particle(unsigned int _dimension);
+    explicit Particle(unsigned int _dimension, const FitnessEvaluatorInterface *_fitnessEvaluatorInterface);
 
     double getPosition(unsigned int dim) const;
 

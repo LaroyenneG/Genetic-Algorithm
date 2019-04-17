@@ -26,6 +26,8 @@ private:
 
     Particle **swarm;
 
+    const FitnessEvaluatorInterface *fitnessEvaluatorInterface;
+
     void initializeSwarm();
 
     Particle *getBestNeighbor(unsigned int index) const;
@@ -40,7 +42,8 @@ public:
     ParticleSwarmOptimization(unsigned int _dimensionSpace, unsigned int _nbParticle, unsigned int _nbNeighbors,
                               unsigned int _nbIteration, double _deltaSpeedMin, double _deltaSpeedMax,
                               double _fitnessValue, double _minBound, double _maxBound, double _indCoefficient,
-                              double _colCoefficient, double _inertiaCoefficient);
+                              double _colCoefficient, double _inertiaCoefficient,
+                              const FitnessEvaluatorInterface *_fitnessEvaluatorInterface);
 
     ~ParticleSwarmOptimization();
 
