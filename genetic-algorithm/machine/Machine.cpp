@@ -14,6 +14,7 @@ Machine::Machine() : processor(createVirtualProcessor(1, 1)) {
 
 Machine::~Machine() {
     freeVirtualProcessor(processor);
+    processor = nullptr;
 }
 
 bool Machine::isPrime(vp_data_type_t number) const {
@@ -83,7 +84,7 @@ void Machine::addRandomInstruction() {
         appendLineVirtualProcessor(processor, OUTPUT, 0, random() % VP_MEMORY_SIZE_MAX_SIZE);
     } else {
 
-        auto instruction = static_cast<vp_instruction_t>(random() % 13);
+        auto instruction = static_cast<vp_instruction_t>(random() % 15);
 
         vp_operand_t operand1 = random();
         vp_operand_t operand2 = random();

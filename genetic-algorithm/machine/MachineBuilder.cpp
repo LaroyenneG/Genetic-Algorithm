@@ -20,24 +20,33 @@ unsigned long MachineBuilder::fitness(const Machine &individual) const {
 
         const Genetic::Population<Machine> &pop = getPopulation();
 
-        auto **threads = new std::thread *[pop.size()];
+        unsigned int size = pop.size();
 
-        for (unsigned int i = 0; i < pop.size(); i++) {
+        auto **threads = new std::thread *[size];
 
-            threads[i] = new std::thread([&]() {
+        for (unsigned int i = 0; i < size; i++) {
 
-                double fvalue = 0;
+            threads[i] = new std::thread([this, &pop, &mutex, i]() {
+
+                mutex.lock();
+
+                auto machine = pop[i];
+
+                mutex.unlock();
+
+
+                unsigned long fvalue = 0;
 
                 try {
 
                     for (auto n : notPrimeNumber) {
-                        if (individual.isPrime(n)) {
+                        if (machine->isPrime(n)) {
                             fvalue++;
                         }
                     }
 
                     for (auto n : primeNumber) {
-                        if (!individual.isPrime(n)) {
+                        if (!machine->isPrime(n)) {
                             fvalue++;
                         }
                     }
@@ -49,9 +58,7 @@ unsigned long MachineBuilder::fitness(const Machine &individual) const {
 
                 mutex.lock();
 
-                auto it = allFitness.begin();
-
-                allFitness.insert(it, std::pair<const Machine *, unsigned long>(&individual, fvalue));
+                allFitness[machine] = fvalue;
 
                 mutex.unlock();
             });
@@ -59,7 +66,7 @@ unsigned long MachineBuilder::fitness(const Machine &individual) const {
         }
 
 
-        for (unsigned int i = 0; i < pop.size(); i++) {
+        for (unsigned int i = 0; i < size; i++) {
             threads[i]->join();
             delete threads[i];
         }

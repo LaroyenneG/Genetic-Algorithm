@@ -7,7 +7,7 @@
 
 #define DEFAULT_MUTATION_PROBABILITY 0.1
 #define DEFAULT_CROSSING_PROBABILITY 0.3
-#define DEFAULT_MAX_ITERATION 100000
+#define DEFAULT_MAX_ITERATION 10000000
 
 #include <random>
 #include <cassert>
@@ -135,6 +135,8 @@ namespace Genetic {
         iteration = 0;
 
         while (bestFitness() > 0 && iteration < maxIteration) {
+
+            std::cout << "Iteration : " << iteration << std::endl;
 
             Population<I> newPopulation;
 

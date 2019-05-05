@@ -59,7 +59,9 @@ namespace Genetic {
 
         Population<I> &operator=(const Population<I> &population);
 
-        auto &operator[](unsigned long id) const;
+        const I *operator[](unsigned long id) const;
+
+        I *operator[](unsigned long id);
     };
 
     template<typename I>
@@ -214,7 +216,7 @@ namespace Genetic {
     }
 
     template<typename I>
-    auto &Population<I>::operator[](unsigned long id) const {
+    const I *Population<I>::operator[](unsigned long id) const {
         return individuals[id];
     }
 
@@ -246,6 +248,12 @@ namespace Genetic {
         os << "}\n";
 
         return os;
+    }
+
+    template<typename I>
+    I *Population<I>::operator[](unsigned long id) {
+
+        return individuals[id];
     }
 }
 

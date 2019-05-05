@@ -7,6 +7,7 @@
 
 int main(int argc, char **argv) {
 
+    srandom(static_cast<unsigned int>(time(nullptr)));
 
     MachineBuilder machineBuilder;
 
