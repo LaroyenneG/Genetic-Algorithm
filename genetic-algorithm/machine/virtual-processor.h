@@ -11,12 +11,17 @@ Created by Guillaume Laroyenne on 03/05/19.
 #define VP_MEMORY_BLOCK_SIZE 10
 #define VP_MEMORY_SIZE_MAX_SIZE 100000
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 typedef long double vp_data_type_t;
 typedef long long vp_operand_t;
 
 typedef enum {
-    ADD,
-    MULT,
+    ADD = 0,
+    MULT = 1,
     DIV,
     COPY,
     SUB,
@@ -50,18 +55,22 @@ typedef struct {
 } virtual_processor_t;
 
 
-extern virtual_processor_t *createVirtualProcessor(size_t input_size, size_t output_size);
+virtual_processor_t *createVirtualProcessor(size_t input_size, size_t output_size);
 
-extern void freeVirtualProcessor(virtual_processor_t *virtualProcessor);
+void freeVirtualProcessor(virtual_processor_t *virtualProcessor);
 
-extern pid_t executeVirtualProcessor(virtual_processor_t *virtualProcessor);
+pid_t executeVirtualProcessor(virtual_processor_t *virtualProcessor);
 
-extern void writeVirtualProcessor(virtual_processor_t *virtualProcessor, size_t index, vp_data_type_t value);
+void writeVirtualProcessor(virtual_processor_t *virtualProcessor, size_t index, vp_data_type_t value);
 
-extern vp_data_type_t readVirtualProcessor(virtual_processor_t *virtualProcessor, size_t index);
+vp_data_type_t readVirtualProcessor(virtual_processor_t *virtualProcessor, size_t index);
 
-extern void
+void
 appendLineVirtualProcessor(virtual_processor_t *virtualProcessor, vp_instruction_t instruction, vp_operand_t left,
                            vp_operand_t right);
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif //VIRTUALPROCESSOR_VIRTUAL_PROCESSOR_H

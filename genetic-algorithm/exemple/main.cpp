@@ -39,6 +39,7 @@ void cardDemo() {
 }
 
 void queenDemo() {
+
     QueenSetter queenSetter;
 
     launch(queenSetter);

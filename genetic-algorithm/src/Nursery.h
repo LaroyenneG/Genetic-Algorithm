@@ -7,7 +7,7 @@
 
 #define DEFAULT_MUTATION_PROBABILITY 0.1
 #define DEFAULT_CROSSING_PROBABILITY 0.3
-#define DEFAULT_MAX_ITERATION 10000000
+#define DEFAULT_MAX_ITERATION 100000
 
 #include <random>
 #include <cassert>
@@ -53,6 +53,8 @@ namespace Genetic {
         static bool probability(float p);
 
     protected:
+        const Population<I> &getPopulation() const;
+
         virtual unsigned long fitness(const I &individual) const = 0;
 
         virtual void mutate(I &individual) const = 0;
@@ -212,6 +214,11 @@ namespace Genetic {
         for (int i = 0; i < size; ++i) {
             appendIndividual(generateIndividual());
         }
+    }
+
+    template<typename I>
+    const Population<I> &Nursery<I>::getPopulation() const {
+        return population;
     }
 }
 
